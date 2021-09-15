@@ -1,0 +1,19 @@
+{{- if .Values.budget.enabled -}}
+{{- if .Values.budget.minAvailable -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "go-gorilla-restsvc.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+labels:
+  name: {{ include "go-gorilla-restsvc.fullname" . }}
+  chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  release: {{ .Release.Name }}
+  heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ include "go-gorilla-restsvc.fullname" . }}
+  minAvailable: {{ .Values.budget.minAvailable }}
+{{- end -}}
+{{- end -}}

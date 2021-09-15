@@ -1,0 +1,29 @@
+{{- if .Values.hpaAutoscaling.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "go-gorilla-restsvc.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "go-gorilla-restsvc.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "go-gorilla-restsvc.fullname" . }}
+  minReplicas: {{ .Values.hpaAutoscaling.minReplicas }}
+  maxReplicas: {{ .Values.hpaAutoscaling.maxReplicas }}
+  metrics:
+  {{- if .Values.hpaAutoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.hpaAutoscaling.targetCPUUtilizationPercentage }}
+  {{- end }}
+  {{- if .Values.hpaAutoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.hpaAutoscaling.targetMemoryUtilizationPercentage }}
+  {{- end }}
+{{- end }}
