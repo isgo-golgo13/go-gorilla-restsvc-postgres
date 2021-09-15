@@ -1,3 +1,3 @@
 #! /bin/sh
 
-helm upgrade --install go-gorilla-restsvc --namespace go-gorilla-restsvc ./go-gorilla-restsvc
+helm upgrade --install go-gorilla-restsvc-postgres --namespace go-gorilla-restsvc-postgres ./go-gorilla-restsvc-postgres

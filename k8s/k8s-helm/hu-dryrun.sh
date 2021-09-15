@@ -1,3 +1,3 @@
 # !/bin/sh
 
-helm uninstall go-gorilla-restsvc --namespace go-gorilla-restsvc ./go-gorilla-restsvc --dry-run   
+helm uninstall go-gorilla-restsvc-postgres --namespace go-gorilla-restsvc-postgres ./go-gorilla-restsvc-postgres --dry-run   

@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ include "go-gorilla-restsvc-postgres.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  selector:
+    istio: {{ .Values.ingressGateway.selector | quote }} # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*" # resolves to 127.0.0.1

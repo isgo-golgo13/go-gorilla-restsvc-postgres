@@ -1,4 +1,4 @@
 #! /bin/sh
 
 # ht.sh is a wrapper for the `helm template` command to locally render the helm chart with the values.yaml
-helm template go-gorilla-restsvc-template ./go-gorilla-restsvc 
+helm template go-gorilla-restsvc-postgres-template ./go-gorilla-restsvc-postgres
