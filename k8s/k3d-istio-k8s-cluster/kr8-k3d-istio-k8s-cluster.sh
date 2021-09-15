@@ -13,3 +13,5 @@ k3d cluster create k3d-istio-k8s-cluster \
 istioctl install --set profile=demo
 
 kubectl label namespace default istio-injection=enabled
+
+#helm install postgresql bitnami/postgresql

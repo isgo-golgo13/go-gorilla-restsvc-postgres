@@ -11,3 +11,4 @@ k3d cluster create k3d-traefik-k8s-cluster \
 --k3s-server-arg "--no-deploy=traefik"
 
 helm upgrade --install traefik traefik/traefik
+#helm install postgresql bitnami/postgresql
