@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/isgo-golgo13/go-gorilla-restsvc/logger"
-	"github.com/isgo-golgo13/go-gorilla-restsvc/routes"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/logger"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/routes"
 )
 
 func NewRouter() *mux.Router {

@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"github.com/isgo-golgo13/go-gorilla-restsvc/route_handlers"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/route_handlers"
 )
 
 type Route struct {

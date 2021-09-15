@@ -6,7 +6,7 @@ SERVICE_NAME=service
 all:
 	
 compile: 
-	go build github.com/isgo-golgo13/go-gorilla-restsvc/cmd/service
+	go build github.com/isgo-golgo13/go-gorilla-restsvc-postgres/cmd/service
 
 clean: 
 	rm -f ${SERVICE_NAME}

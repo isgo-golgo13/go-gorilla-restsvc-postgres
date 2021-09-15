@@ -7,8 +7,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/isgo-golgo13/go-gorilla-restsvc/data"
-	"github.com/isgo-golgo13/go-gorilla-restsvc/service_errors"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/data"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/service_errors"
 )
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {

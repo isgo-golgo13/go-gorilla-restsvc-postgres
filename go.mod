@@ -1,4 +1,4 @@
-module github.com/isgo-golgo13/go-gorilla-restsvc
+module github.com/isgo-golgo13/go-gorilla-restsvc-postgres
 
 go 1.16
 
