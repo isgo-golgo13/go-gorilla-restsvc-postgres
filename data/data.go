@@ -1,8 +1,12 @@
 package data
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
+	"log"
+
+	_ "github.com/lib/pq"
 )
 
 type Engine struct {
@@ -10,103 +14,111 @@ type Engine struct {
 	SerialID      string `json:"serial_id"`
 	EngineConfig string `json:"engine_config"`
 	EngineCapacity float32 `json:"engine_capacity"`
+	EngineRPMRedline int32 `json:"engine_rpm_redline"`
 }
 
+
+type EngineStorageConnection struct {
+	EngineStorageHostServer string 				/** "localhost or IP:<X.X.X.X>" */
+	EngineStorageHostServerPort int16			/** postgres port 5432 */
+	EngineStorageServerUser string				/** postgres user "" */
+	EngineStorageServerUserPassword string      /** postgres user password "" */
+	EngineStorageServerDB string				/** postgres db "postgres" */
+}
+
+func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
+	                             storageServerUser string, storageServerUserPassword string,
+								 storageServerDB string) (*EngineStorageConnection) {
+	conn := &EngineStorageConnection {
+		EngineStorageHostServer: hostStorageServer,
+		EngineStorageHostServerPort: hostStorageServerPort,
+		EngineStorageServerUser: storageServerUser,
+		EngineStorageServerUserPassword: storageServerUserPassword,
+		EngineStorageServerDB: storageServerDB,
+	}
+	return conn
+}
 
 
 var TransactionEngineStorage *EngineStorage
 type EngineStorage struct {
-	engines []Engine
+	sql *sql.DB
 }
 
-func NewEngineStorage () (*EngineStorage) {
-	storage := EngineStorage {
-		engines: []Engine {
-			{
-				ID:            "100000001",
-				SerialID:      "VW_100000001",
-				EngineConfig:  "V8",
-				EngineCapacity: 250.50,
-				
-			},
-			{
-				ID:            "100000002",
-				SerialID:      "Audi_100000002",
-				EngineConfig:  "V8",
-				EngineCapacity: 220.50,
-			},
-			{
-				ID:            "100000003",
-				SerialID:      "Porsche_100000003",
-				EngineConfig:  "V8",
-				EngineCapacity: 50.50,
-			},
-			{
-				ID:            "100000004",
-				SerialID:      "Porsche_100000004",
-				EngineConfig:          "V8",
-				EngineCapacity: 270.50,
-			},
-			{
-				ID:            "100000005",
-				SerialID:      "Mercedes_10000005",
-				EngineConfig:          "V8-Twin-Turbo",
-				EngineCapacity: 250.25,
-			},
-			{
-				ID:            "100000006",
-				SerialID:      "Mercedes_10000006",
-				EngineConfig:          "V8-Twin-Turbo",
-				EngineCapacity: 270.25,
-			},
-			{
-				ID:            "100000007",
-				SerialID:      "Mercedes_10000007",
-				EngineConfig:          "V12-Twin-Turbo",
-				EngineCapacity: 350.75,
-			},
-			{
-				ID:            "100000008",
-				SerialID:      "Mercedes_10000008",
-				EngineConfig:          "V8",
-				EngineCapacity: 250.50,
-			},
-		},
-	}
+func NewEngineStorage (db *sql.DB) (*EngineStorage) {
+	 storage := EngineStorage { sql: db }
 	return &storage
 }
 
 
 
-func (self *EngineStorage) checkRange(id int) (bool, error) {
-	if id > len(self.engines)-1 {
-		id_out_of_range := fmt.Sprintf("%d", id)
-		return false, errors.New("id: " + id_out_of_range + " out of range of storage array")
-	} else {
-		return true, nil
-	}
-}
-
-/** Do range check if id is out of range in the DB array */
 func (self *EngineStorage) GetEngine(id int) (*Engine, error) {
 	if self == nil {
-		return nil, nil 
+		return nil, errors.New("reference to active TransactionalEngineStorage is nil")
 	}
-	in_range, err := self.checkRange(id)
-	if in_range == false && err != nil {
+	var engine *Engine
+	err := self.sql.QueryRow("SELECT * FROM engines WHERE id = $1", id).Scan(engine)
+	if err != nil {
 		return nil, err
-	} else {
-		return &self.engines[id], nil
 	}
+	return engine, nil
 }
 
 func (self *EngineStorage) GetEngines () ([]Engine, error) {
 	if self == nil {
 		return nil, errors.New("reference to active TransactionalEngineStorage is nil")
 	}
-	return self.engines, nil
+
+	engineRows, err := self.sql.Query("SELECT * FROM engines")
+	if err != nil {
+		return nil, err
+	}
+	var engines []Engine
+	engineRows.Scan(engines)
+
+	return engines, nil
 }
 
+/** init **/
 func init () {
-	TransactionEngineStorage = NewEngineStorage()
+    /** connect  to postgres on "localhost", port 5432, dbuser "isgogolgo13", dbuserpassword "isgogolgo13",  db "enginedb" */
+	connection := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
+
+	db, err := initDB(connection)
+	if err !=  nil {
+		log.Fatalf("init error initDB() %s", err)
+	}
+
+	TransactionEngineStorage = NewEngineStorage(db) 
+}
+
+
+/** InitDB **/
+func initDB (conn *EngineStorageConnection) (*sql.DB, error) {
+	var dbCon = fmt.Sprintf("host=%s port=%d user=%s " + "password=%s dbname=%s sslmode=disable",
+    	conn.EngineStorageHostServer, 
+		conn.EngineStorageHostServerPort, 
+		conn.EngineStorageServerUser, conn.EngineStorageServerUserPassword, 
+		conn.EngineStorageServerDB)
+
+	log.Println(dbCon)
+	
+	db, err := sql.Open("postgres", dbCon)
+	if err != nil {
+		log.Fatalf("initDB error sql.Open() %s", err)
+	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("initDB() error db.Ping() %s", err)
+	}
+	log.Print("db.Ping() connection to postgres OK")
+	return db, nil
+
+	rows, err:= db.Query("SELECT * FROM engines")
+	if err != nil {
+		log.Fatalf("initDB() error db.Query() %s", err)
+	}
+
+	
 }
