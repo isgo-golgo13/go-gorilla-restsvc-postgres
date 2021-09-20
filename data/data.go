@@ -19,11 +19,11 @@ type Engine struct {
 
 
 type EngineStorageConnection struct {
-	EngineStorageHostServer string 				/** "localhost or IP:<X.X.X.X>" */
+	EngineStorageHostServer string 				/** "localhost or server IP */
 	EngineStorageHostServerPort int16			/** postgres port 5432 */
 	EngineStorageServerUser string				/** postgres user "" */
 	EngineStorageServerUserPassword string      /** postgres user password "" */
-	EngineStorageServerDB string				/** postgres db "postgres" */
+	EngineStorageServerDB string				/** postgres db "enginedb" */
 }
 
 func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
@@ -64,24 +64,37 @@ func (self *EngineStorage) GetEngine(id int) (*Engine, error) {
 	return engine, nil
 }
 
+/** GetEngines */
 func (self *EngineStorage) GetEngines () ([]Engine, error) {
 	if self == nil {
 		return nil, errors.New("reference to active TransactionalEngineStorage is nil")
 	}
 
-	engineRows, err := self.sql.Query("SELECT * FROM engines")
+	rows, err:= self.sql.Query("SELECT * FROM engines")
 	if err != nil {
-		return nil, err
+		log.Fatalf("GetEngines() error sql.Query() %s", err)
 	}
+	
 	var engines []Engine
-	engineRows.Scan(engines)
-
+	var rowErr error
+	for rows.Next() {
+		engine := Engine{}
+		if rowErr = rows.Scan(&engine.ID, 
+			               &engine.SerialID, 
+						   &engine.EngineConfig, 
+						   &engine.EngineCapacity, 
+						   &engine.EngineRPMRedline); err != nil {
+		  return nil, rowErr
+		}
+		engines = append(engines, engine)
+	}
 	return engines, nil
 }
 
+
 /** init **/
 func init () {
-    /** connect  to postgres on "localhost", port 5432, dbuser "isgogolgo13", dbuserpassword "isgogolgo13",  db "enginedb" */
+    
 	connection := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
 
 	db, err := initDB(connection)
@@ -113,12 +126,5 @@ func initDB (conn *EngineStorageConnection) (*sql.DB, error) {
 		log.Fatalf("initDB() error db.Ping() %s", err)
 	}
 	log.Print("db.Ping() connection to postgres OK")
-	return db, nil
-
-	rows, err:= db.Query("SELECT * FROM engines")
-	if err != nil {
-		log.Fatalf("initDB() error db.Query() %s", err)
-	}
-
-	
+	return db, nil	
 }

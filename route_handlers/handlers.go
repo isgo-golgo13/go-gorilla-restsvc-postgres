@@ -27,8 +27,6 @@ func GetEngines(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	encoder := json.NewEncoder(w)
-	//engines, err := []data.Engine{}, errors.New("")
-	//engines, err := data.TransactionEngineStorage.GetEngines()
 	engines, err := data.TransactionEngineStorage.GetEngines()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -56,7 +54,7 @@ func GetEngine(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 	}
-	
+
 	engine, err := data.TransactionEngineStorage.GetEngine(id)
 	if err != nil {
 		serviceError:= service_errors.NewServiceError(err, nil)
