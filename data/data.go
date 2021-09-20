@@ -26,9 +26,12 @@ type EngineStorageConnection struct {
 	EngineStorageServerDB string				/** postgres db "enginedb" */
 }
 
+/** TODO: Load config values from .json config file */
 func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
 	                             storageServerUser string, storageServerUserPassword string,
 								 storageServerDB string) (*EngineStorageConnection) {
+
+	/** TODO: Load .json config file with parameters */
 	conn := &EngineStorageConnection {
 		EngineStorageHostServer: hostStorageServer,
 		EngineStorageHostServerPort: hostStorageServerPort,
@@ -51,17 +54,22 @@ func NewEngineStorage (db *sql.DB) (*EngineStorage) {
 }
 
 
-
+/** GetEngines/{id} */
 func (self *EngineStorage) GetEngine(id int) (*Engine, error) {
 	if self == nil {
 		return nil, errors.New("reference to active TransactionalEngineStorage is nil")
 	}
-	var engine *Engine
-	err := self.sql.QueryRow("SELECT * FROM engines WHERE id = $1", id).Scan(engine)
+	var engine Engine
+	err := self.sql.QueryRow("SELECT * FROM engines WHERE id = $1", id).Scan(
+		    &engine.ID, 
+			&engine.SerialID, 
+			&engine.EngineConfig, 
+			&engine.EngineCapacity, 
+			&engine.EngineRPMRedline)
 	if err != nil {
 		return nil, err
 	}
-	return engine, nil
+	return &engine, nil
 }
 
 /** GetEngines */
@@ -95,9 +103,8 @@ func (self *EngineStorage) GetEngines () ([]Engine, error) {
 /** init **/
 func init () {
     
-	connection := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
-
-	db, err := initDB(connection)
+	dbCon := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
+	db, err := initDB(dbCon)
 	if err !=  nil {
 		log.Fatalf("init error initDB() %s", err)
 	}
