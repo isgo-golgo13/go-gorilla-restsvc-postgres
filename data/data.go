@@ -28,13 +28,9 @@ type EngineStorageConnection struct {
 	EngineStorageServerDB string				/** postgres db "enginedb" */
 }
 
-/** TODO: Load config values from .json config file */
-// func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
-// 	                             storageServerUser string, storageServerUserPassword string,
-// 								 storageServerDB string) (*EngineStorageConnection) {
 
 func NewEngineStorageConnection () (*EngineStorageConnection) {
-	
+
 	serverPort := db_config.GoDotEnvVar("EngineStorageHostServerPort")
 	serverPortConv, err := strconv.ParseInt(serverPort, 10, 16)
 	if err != nil {
@@ -111,8 +107,7 @@ func (self *EngineStorage) GetEngines () ([]Engine, error) {
 
 /** init **/
 func init () {
-    
-	//dbCon := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
+
 	dbCon := NewEngineStorageConnection()
 	db, err := initDB(dbCon)
 	if err !=  nil {
