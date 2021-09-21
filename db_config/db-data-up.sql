@@ -1,3 +1,11 @@
+--DROP ROLE IF EXISTS isgogolgo132;
+--CREATE ROLE isgogolgo132 WITH LOGIN PASSWORD 'isgogolgo132';
+--ALTER USER isgogolgo132 CREATEDB;
+--ALTER USER isgogolgo132 CREATEROLE;
+
+--DROP DATABASE IF EXISTS EngineDB2;
+--CREATE DATABASE EngineDB2;
+
 
 CREATE TABLE IF NOT EXISTS Engines (
   id SERIAL PRIMARY KEY,
@@ -7,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Engines (
   engine_rpm_redline SMALLINT NOT NULL
 );
 
-GRANT ALL PRIVILEGES ON TABLE Engines TO isgogolgo13;
+GRANT ALL PRIVILEGES ON TABLE Engines TO isgogolgo132;
 
 INSERT INTO Engines (serial_id, engine_config, engine_capacity, engine_rpm_redline) 
 VALUES ('VW_100000001', 'V8', 6250.50, 12500);
