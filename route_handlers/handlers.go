@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/data"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/datastore_service"
 	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/service_errors"
 )
 
@@ -27,7 +27,7 @@ func GetEngines(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	encoder := json.NewEncoder(w)
-	engines, err := data.TransactionEngineStorage.GetEngines()
+	engines, err := datastore_service.TransactionEngineStorage.GetEngines()
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		serviceError := service_errors.NewServiceError(err, engines)
@@ -55,7 +55,7 @@ func GetEngine(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	engine, err := data.TransactionEngineStorage.GetEngine(id)
+	engine, err := datastore_service.TransactionEngineStorage.GetEngine(id)
 	if err != nil {
 		serviceError:= service_errors.NewServiceError(err, nil)
 		w.WriteHeader(http.StatusNotFound)

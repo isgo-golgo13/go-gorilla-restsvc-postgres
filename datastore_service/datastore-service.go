@@ -1,4 +1,4 @@
-package data
+package datastore_service
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/db_config"
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/datastore_config"
 	_ "github.com/lib/pq"
 )
 
@@ -31,18 +31,18 @@ type EngineStorageConnection struct {
 
 func NewEngineStorageConnection () (*EngineStorageConnection) {
 
-	serverPort := db_config.GoDotEnvVar("EngineStorageHostServerPort")
+	serverPort := datastore_config.GoDotEnvVar("EngineStorageHostServerPort")
 	serverPortConv, err := strconv.ParseInt(serverPort, 10, 16)
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
 
 	conn := &EngineStorageConnection {
-		EngineStorageHostServer: db_config.GoDotEnvVar("EngineStorageHostServer"),
+		EngineStorageHostServer: datastore_config.GoDotEnvVar("EngineStorageHostServer"),
 		EngineStorageHostServerPort: int16(serverPortConv),
-		EngineStorageServerUser: db_config.GoDotEnvVar("EngineStorageServerUser"),
-		EngineStorageServerUserPassword: db_config.GoDotEnvVar("EngineStorageServerUserPassword"),
-		EngineStorageServerDB: db_config.GoDotEnvVar("EngineStorageServerDB"),
+		EngineStorageServerUser: datastore_config.GoDotEnvVar("EngineStorageServerUser"),
+		EngineStorageServerUserPassword: datastore_config.GoDotEnvVar("EngineStorageServerUserPassword"),
+		EngineStorageServerDB: datastore_config.GoDotEnvVar("EngineStorageServerDB"),
 	}
 	return conn
 }

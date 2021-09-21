@@ -1,4 +1,4 @@
-package db_config
+package datastore_config
 
 import (
 	"log"
