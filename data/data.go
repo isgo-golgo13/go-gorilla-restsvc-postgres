@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strconv"
 
+	"github.com/isgo-golgo13/go-gorilla-restsvc-postgres/db_config"
 	_ "github.com/lib/pq"
 )
 
@@ -27,17 +29,24 @@ type EngineStorageConnection struct {
 }
 
 /** TODO: Load config values from .json config file */
-func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
-	                             storageServerUser string, storageServerUserPassword string,
-								 storageServerDB string) (*EngineStorageConnection) {
+// func NewEngineStorageConnection (hostStorageServer string, hostStorageServerPort int16, 
+// 	                             storageServerUser string, storageServerUserPassword string,
+// 								 storageServerDB string) (*EngineStorageConnection) {
 
-	/** TODO: Load .json config file with parameters */
+func NewEngineStorageConnection () (*EngineStorageConnection) {
+	
+	serverPort := db_config.GoDotEnvVar("EngineStorageHostServerPort")
+	serverPortConv, err := strconv.ParseInt(serverPort, 10, 16)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+
 	conn := &EngineStorageConnection {
-		EngineStorageHostServer: hostStorageServer,
-		EngineStorageHostServerPort: hostStorageServerPort,
-		EngineStorageServerUser: storageServerUser,
-		EngineStorageServerUserPassword: storageServerUserPassword,
-		EngineStorageServerDB: storageServerDB,
+		EngineStorageHostServer: db_config.GoDotEnvVar("EngineStorageHostServer"),
+		EngineStorageHostServerPort: int16(serverPortConv),
+		EngineStorageServerUser: db_config.GoDotEnvVar("EngineStorageServerUser"),
+		EngineStorageServerUserPassword: db_config.GoDotEnvVar("EngineStorageServerUserPassword"),
+		EngineStorageServerDB: db_config.GoDotEnvVar("EngineStorageServerDB"),
 	}
 	return conn
 }
@@ -103,12 +112,12 @@ func (self *EngineStorage) GetEngines () ([]Engine, error) {
 /** init **/
 func init () {
     
-	dbCon := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
+	//dbCon := NewEngineStorageConnection("localhost", 5432, "isgogolgo13", "isgogolgo13", "enginedb")
+	dbCon := NewEngineStorageConnection()
 	db, err := initDB(dbCon)
 	if err !=  nil {
 		log.Fatalf("init error initDB() %s", err)
 	}
-
 	TransactionEngineStorage = NewEngineStorage(db) 
 }
 
