@@ -24,7 +24,7 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 
 /** GET /engines */
 func GetEngines(w http.ResponseWriter, r *http.Request) {
-
+	
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	encoder := json.NewEncoder(w)
 	engines, err := datastore_service.TransactionEngineStorage.GetEngines()
