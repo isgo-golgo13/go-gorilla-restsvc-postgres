@@ -97,7 +97,7 @@ resources:
 
 # VPA values
 vpaAutoscaling:
-  enabled: true
+  enabled: false
   updatePolicy:
     updateMode: "Off"
 
@@ -121,7 +121,9 @@ affinity: {}
 
 
 
-deployment:
+deploymentConfig:
+  config: 
+    enabled: false
   dataStoreConnectionConfig: |
 
 
