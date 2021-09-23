@@ -119,7 +119,7 @@ func init () {
 
 /** InitDB **/
 func initDB (conn *EngineStorageConnection) (*sql.DB, error) {
-	var dbCon = fmt.Sprintf("host=%s port=%d user=%s " + "password=%s dbname=%s sslmode=disable",
+	var dbCon = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
     	conn.EngineStorageHostServer, 
 		conn.EngineStorageHostServerPort, 
 		conn.EngineStorageServerUser, conn.EngineStorageServerUserPassword, 

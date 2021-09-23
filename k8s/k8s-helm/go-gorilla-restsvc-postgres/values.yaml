@@ -132,7 +132,7 @@ deploymentConfig:
 ###########  Postgres  Subchart  ###########
 ############################################
 postgresql:
-  postgresqlDatabase: "postgres"
+  postgresqlDatabase: "EngineDB"   #postgres ok on k8s, EngineDB verify
   postgresqlUsername: "isgogolgo13"
   postgresqlPassword: "isgogolgo13"
 
@@ -141,6 +141,7 @@ postgresql:
   
   initdbScripts:
     db-up.sql: |
+      CREATE DATABASE EngineDB;
 
       CREATE TABLE IF NOT EXISTS Engines (
       id SERIAL PRIMARY KEY,
