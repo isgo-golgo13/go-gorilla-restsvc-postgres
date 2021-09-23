@@ -9,7 +9,7 @@ replicaCount: 1
 
 image:
   repository: isgogolgo13/go-gorilla-restsvc-postgres
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.0"
 
@@ -132,7 +132,7 @@ deploymentConfig:
 ###########  Postgres  Subchart  ###########
 ############################################
 postgresql:
-  postgresqlDatabase: "EngineDB"
+  postgresqlDatabase: "postgres"
   postgresqlUsername: "isgogolgo13"
   postgresqlPassword: "isgogolgo13"
 
@@ -141,7 +141,6 @@ postgresql:
   
   initdbScripts:
     db-up.sql: |
-      CREATE DATABASE IF NOT EXISTS EngineDB;
 
       CREATE TABLE IF NOT EXISTS Engines (
       id SERIAL PRIMARY KEY,
