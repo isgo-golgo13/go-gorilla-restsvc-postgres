@@ -21,7 +21,7 @@ type Engine struct {
 
 type EngineStorageItx interface {
   GetEngines() ([]Engine, error)
-  GetEngine(id int)	(*Engine, error)
+  GetEngine(id int) (*Engine, error)
 }
 
 
@@ -54,7 +54,6 @@ func NewEngineStorageConnection () (*EngineStorageConnection) {
 }
 
 
-//var TransactionEngineStorage *EngineStorage
 var TransactionEngineStorage EngineStorageItx
 type EngineStorage struct {
 	sql *sql.DB
@@ -120,7 +119,7 @@ func init () {
 	if err !=  nil {
 		log.Fatalf("init error initDB() %s", err)
 	}
-	
+
 	TransactionEngineStorage = NewEngineStorage(db)
 }
 
