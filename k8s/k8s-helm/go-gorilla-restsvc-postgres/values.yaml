@@ -127,8 +127,8 @@ affinity: {}
 ############################################
 postgresql:
   postgresqlDatabase: "EngineDB"
-  postgresqlUsername: "postgres"
-  postgresqlPassword: "postgres"
+  postgresqlUsername: "isgogolgo13"
+  postgresqlPassword: "isgogolgo13"
 
   volumePermissions:
     enabled: true
