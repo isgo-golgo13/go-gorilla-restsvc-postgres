@@ -120,7 +120,7 @@ func init () {
 	if err !=  nil {
 		log.Fatalf("init error initDB() %s", err)
 	}
-	//TransactionEngineStorage = NewEngineStorage(db) 
+	
 	TransactionEngineStorage = NewEngineStorage(db)
 }
 
