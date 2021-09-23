@@ -4,5 +4,10 @@ kind: ConfigMap
 metadata:
   name: "{{ include "go-gorilla-restsvc-postgres.fullname" . }}-config"
 data:
-  dataStoreConnectionConfig:
+  dataStoreConnectionConfig: |
+    EngineStorageHostServer=go-gorilla-restsvc-postgres-postgresql
+    EngineStorageHostServerPort=5432
+    EngineStorageServerUser=isgogolgo13
+    EngineStorageServerUserPassword=isgogolgo13
+    EngineStorageServerDB=EngineDB  
 {{- end }}

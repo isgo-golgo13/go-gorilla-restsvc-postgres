@@ -21,11 +21,11 @@ type Engine struct {
 
 
 type EngineStorageConnection struct {
-	EngineStorageHostServer string 				/** "localhost" or server IP */
-	EngineStorageHostServerPort int16			/** postgres port 5432 */
-	EngineStorageServerUser string				/** postgres user "" */
-	EngineStorageServerUserPassword string      /** postgres user password "" */
-	EngineStorageServerDB string				/** postgres db "enginedb" */
+	EngineStorageHostServer string 			
+	EngineStorageHostServerPort int16			
+	EngineStorageServerUser string	
+	EngineStorageServerUserPassword string
+	EngineStorageServerDB string
 }
 
 
