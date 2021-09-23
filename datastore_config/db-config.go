@@ -8,7 +8,7 @@ import (
 )
 
 func GoDotEnvVar(key string) string {
-	err := godotenv.Load("./db_config/.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("%s", err)
 	}
