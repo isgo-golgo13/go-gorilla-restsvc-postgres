@@ -15,7 +15,7 @@ type Route struct {
 
 type Routes []Route
 
-//Add route handlers here
+/** Add Routes **/
 var Route_Entries = Routes{
 	Route{
 		"HealthCheck",
