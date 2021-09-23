@@ -122,10 +122,14 @@ affinity: {}
 
 
 deploymentConfig:
-  config: 
-    enabled: false
-  dataStoreConnectionConfig: |
-
+  enabled: true 
+  connectionConfig:
+    dataStoreConnectionConfig: |
+      EngineStorageHostServer=go-gorilla-restsvc-postgres-postgresql
+      EngineStorageHostServerPort=5432
+      EngineStorageServerUser=isgogolgo13
+      EngineStorageServerUserPassword=isgogolgo13
+      EngineStorageServerDB=EngineDB 
 
 
 ############################################

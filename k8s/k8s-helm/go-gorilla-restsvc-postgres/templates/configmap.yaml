@@ -1,13 +1,10 @@
-{{- if .Values.deploymentConfig.config.enabled }}
+{{- if .Values.deploymentConfig.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "{{ include "go-gorilla-restsvc-postgres.fullname" . }}-config"
+{{- with .Values.deploymentConfig.connectionConfig }}
 data:
-  dataStoreConnectionConfig: |
-    EngineStorageHostServer=go-gorilla-restsvc-postgres-postgresql
-    EngineStorageHostServerPort=5432
-    EngineStorageServerUser=isgogolgo13
-    EngineStorageServerUserPassword=isgogolgo13
-    EngineStorageServerDB=EngineDB  
+ {{- toYaml . | nindent 4 }}
+{{- end}} 
 {{- end }}

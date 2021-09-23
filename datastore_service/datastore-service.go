@@ -19,6 +19,12 @@ type Engine struct {
 	EngineRPMRedline int32 `json:"engine_rpm_redline"`
 }
 
+type EngineStorageItx interface {
+  GetEngines() ([]Engine, error)
+  GetEngine(id int)	(*Engine, error)
+}
+
+
 
 type EngineStorageConnection struct {
 	EngineStorageHostServer string 			
@@ -48,7 +54,8 @@ func NewEngineStorageConnection () (*EngineStorageConnection) {
 }
 
 
-var TransactionEngineStorage *EngineStorage
+//var TransactionEngineStorage *EngineStorage
+var TransactionEngineStorage EngineStorageItx
 type EngineStorage struct {
 	sql *sql.DB
 }
@@ -113,7 +120,8 @@ func init () {
 	if err !=  nil {
 		log.Fatalf("init error initDB() %s", err)
 	}
-	TransactionEngineStorage = NewEngineStorage(db) 
+	//TransactionEngineStorage = NewEngineStorage(db) 
+	TransactionEngineStorage = NewEngineStorage(db)
 }
 
 
